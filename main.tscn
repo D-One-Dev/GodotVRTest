@@ -1,0 +1,65 @@
+[gd_scene load_steps=7 format=3 uid="uid://bxprxd1akupuc"]
+
+[ext_resource type="Script" uid="uid://c1a0jjioehnea" path="res://teleportationController.gd" id="1_ig7tw"]
+
+[sub_resource type="StandardMaterial3D" id="StandardMaterial3D_0xm2m"]
+albedo_color = Color(0.66015625, 0.60684896, 0.17277527, 1)
+
+[sub_resource type="CylinderMesh" id="CylinderMesh_ig7tw"]
+
+[sub_resource type="StandardMaterial3D" id="StandardMaterial3D_h2yge"]
+albedo_color = Color(0.19247437, 0.46484375, 0.2605667, 1)
+
+[sub_resource type="PlaneMesh" id="PlaneMesh_0xm2m"]
+material = SubResource("StandardMaterial3D_h2yge")
+
+[sub_resource type="BoxShape3D" id="BoxShape3D_h2yge"]
+size = Vector3(10, 0.1, 10)
+
+[node name="Main" type="Node3D"]
+
+[node name="DirectionalLight3D" type="DirectionalLight3D" parent="."]
+transform = Transform3D(1, 0, 0, 0, 0.7775412, 0.628832, 0, -0.628832, 0.7775412, 0, 1.6822352, 1.1248035)
+
+[node name="XROrigin3D" type="XROrigin3D" parent="."]
+
+[node name="Right Hand" type="XRController3D" parent="XROrigin3D"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0.1, 1.25, -0.52141905)
+tracker = &"right_hand"
+script = ExtResource("1_ig7tw")
+
+[node name="MeshInstance3D" type="MeshInstance3D" parent="XROrigin3D/Right Hand"]
+transform = Transform3D(0.02, 0, 0, 0, -2.1855695e-09, -0.02, 0, 0.05, -8.7422775e-10, 0, 0, 0)
+material_override = SubResource("StandardMaterial3D_0xm2m")
+mesh = SubResource("CylinderMesh_ig7tw")
+
+[node name="RayCast3D" type="RayCast3D" parent="XROrigin3D/Right Hand"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, -0.06072651)
+target_position = Vector3(0, 0, -20)
+
+[node name="Left Hand" type="XRController3D" parent="XROrigin3D"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -0.1, 1.25, -0.52141905)
+tracker = &"left_hand"
+script = ExtResource("1_ig7tw")
+
+[node name="MeshInstance3D" type="MeshInstance3D" parent="XROrigin3D/Left Hand"]
+transform = Transform3D(0.02, 0, 0, 0, -2.1855695e-09, -0.02, 0, 0.05, -8.7422775e-10, 0, 0, 0)
+material_override = SubResource("StandardMaterial3D_0xm2m")
+mesh = SubResource("CylinderMesh_ig7tw")
+
+[node name="RayCast3D" type="RayCast3D" parent="XROrigin3D/Left Hand"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, -0.06072651)
+target_position = Vector3(0, 0, -20)
+
+[node name="XRCamera3D" type="XRCamera3D" parent="XROrigin3D"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 1.75, 0)
+
+[node name="Floor" type="StaticBody3D" parent="."]
+
+[node name="MeshInstance3D" type="MeshInstance3D" parent="Floor"]
+transform = Transform3D(5, 0, 0, 0, 5, 0, 0, 0, 5, 0, 0, 0)
+mesh = SubResource("PlaneMesh_0xm2m")
+
+[node name="CollisionShape3D" type="CollisionShape3D" parent="Floor"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, -0.05, 0)
+shape = SubResource("BoxShape3D_h2yge")
